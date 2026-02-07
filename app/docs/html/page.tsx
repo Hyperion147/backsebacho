@@ -1,24 +1,31 @@
-export default function HTMLPage() {
+import Link from "next/link";
+import { type SanityDocument } from "next-sanity";
+
+import { client } from "@/sanity/client";
+
+const POSTS_QUERY = `*[
+  _type == "post"
+  && defined(slug.current)
+]|order(publishedAt desc)[0...12]{_id, title, slug, publishedAt}`;
+
+const options = { next: { revalidate: 30 } };
+
+export default async function IndexPage() {
+  const posts = await client.fetch<SanityDocument[]>(POSTS_QUERY, {}, options);
+
   return (
-    <div className="p-6 md:p-10 font-sans">
-      <div className="mx-auto max-w-4xl">
-        <h1 className="text-4xl font-bold tracking-tight mb-4">
-          HTML Documentation
-        </h1>
-        <p className="text-xl text-muted-foreground mb-8">
-          HyperText Markup Language (HTML) is the core standard for defining the
-          structure and semantics of a document on the web.
-        </p>
-        <div className="rounded-xl border p-8 dark:border-zinc-800 bg-card shadow-sm">
-          <h2 className="text-2xl font-semibold mb-4">Course Objectives</h2>
-          <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-            <li>Understand Semantic HTML5 elements.</li>
-            <li>Master the Document Object Model (DOM) structure.</li>
-            <li>Learn form handling and validation theory.</li>
-            <li>Accessibility standards (WCAG).</li>
-          </ul>
-        </div>
-      </div>
-    </div>
+    <main className="container mx-auto min-h-screen max-w-3xl p-8">
+      <h1 className="text-4xl font-bold mb-8">Posts</h1>
+      <ul className="flex flex-col gap-y-4">
+        {posts.map((post) => (
+          <li className="hover:underline" key={post._id}>
+            <Link href={`/${post.slug.current}`}>
+              <h2 className="text-xl font-semibold">{post.title}</h2>
+              <p>{new Date(post.publishedAt).toLocaleDateString()}</p>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </main>
   );
 }

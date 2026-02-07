@@ -5,7 +5,7 @@ export default function Home() {
     <div className="flex min-h-screen flex-col items-center justify-center bg-background text-foreground transition-colors duration-300">
       <main className="flex flex-col items-center gap-8 text-center px-4">
         <div className="space-y-6">
-          <h1 className="text-5xl font-extrabold tracking-tight sm:text-7xl bg-gradient-to-r from-brand-blue via-brand-indigo to-brand-violet bg-clip-text text-transparent drop-shadow-sm">
+          <h1 className="text-5xl font-extrabold tracking-tight sm:text-7xl drop-shadow-sm">
             Master Web <br className="hidden sm:inline" />
             Concepts
           </h1>
